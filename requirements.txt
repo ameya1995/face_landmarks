@@ -1,8 +1,16 @@
 streamlit
 opencv-python
+opencv-python-headless
+matplotlib
 mediapipe
 pandas
 numpy
 streamlit_webrtc
 av
+libgl1
+libglib2.0-0
+libsm6
+libxrender1
+libxext6
 libgl1-mesa-glx
+libglib2.0-0
