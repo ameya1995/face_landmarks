@@ -9,4 +9,3 @@ pandas
 numpy
 streamlit-webrtc==0.47.7
 av==12.3.0
-libgl1-mesa-glx
