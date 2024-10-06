@@ -1,10 +1,11 @@
-streamlit
-opencv-python
-opencv-python-headless
-matplotlib
-mediapipe
+streamlit==1.36.0
+opencv-contrib-python==4.9.0.80
+opencv-python==4.9.0.80
+matplotlib==3.8.2
+matplotlib-inline @ file:///home/conda/feedstock_root/build_artifacts/matplotlib-inline_1660814786464/work
+mdurl==0.1.2
+mediapipe==0.10.9
 pandas
 numpy
-streamlit_webrtc
-av
-libgl1-mesa-glx
+streamlit-webrtc==0.47.7
+av==12.3.0
