@@ -4,4 +4,5 @@ mediapipe
 pandas
 numpy
 streamlit_webrtc
-av 
+av
+libgl1-mesa-glx
