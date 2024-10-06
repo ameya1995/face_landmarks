@@ -7,6 +7,5 @@ pandas
 numpy
 streamlit_webrtc
 av
-libxrender1
 libxext6
 libgl1-mesa-glx
