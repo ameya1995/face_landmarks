@@ -1,18 +1,16 @@
 FROM python:3.11-slim
 
-# Install system dependencies for OpenCV and MediaPipe
+FROM python:3.11-slim
+
+# Install only essential system dependencies
 RUN apt-get update && apt-get install -y \
     libglib2.0-0 \
-    libsm6 \
-    libxext6 \
-    libxrender-dev \
     libgomp1 \
-    libgtk-3-0 \
-    libavcodec-dev \
-    libavformat-dev \
-    libswscale-dev \
     curl \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /tmp/* \
+    && rm -rf /var/tmp/*
 
 WORKDIR /app
 
@@ -25,6 +23,17 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
+# Set environment variables to suppress warnings and optimize memory
+ENV TF_CPP_MIN_LOG_LEVEL=2
+ENV PYTHONWARNINGS=ignore::UserWarning
+ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+ENV PYTHONUNBUFFERED=1
+ENV STREAMLIT_SERVER_MAX_UPLOAD_SIZE=50
+ENV STREAMLIT_SERVER_MAX_MESSAGE_SIZE=50
+
+# Make startup scripts executable
+RUN chmod +x start.sh deploy.sh
+
 # Create a non-root user for security
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
 USER appuser
@@ -35,5 +44,5 @@ EXPOSE 8501
 # Health check
 HEALTHCHECK CMD curl --fail http://localhost:${PORT:-8501}/_stcore/health || exit 1
 
-# Run the Streamlit app (using streamlit_app.py as the main file)
-CMD ["sh", "-c", "streamlit run streamlit_app.py --server.port=${PORT:-8501} --server.address=0.0.0.0 --server.headless=true --server.enableCORS=false --server.enableXsrfProtection=false"]
+# Run the optimized deployment script
+CMD ["./deploy.sh"]
