@@ -1,25 +1,47 @@
 #!/bin/bash
 
-# Deployment script to choose between original and optimized versions
+# Deployment script with fallback mechanism
 
 echo "🚀 Face Landmarks App Deployment"
-echo "Choose version to deploy:"
-echo "1. Original (full features)"
-echo "2. Optimized (memory efficient)"
 
-# For Render.com, we'll use the optimized version by default
-# You can modify this script to choose different versions
+# Test if we can import the required modules
+python3 -c "import cv2, mediapipe, streamlit; print('✅ All modules imported successfully')" 2>/dev/null
 
-# Use optimized version for production deployment
-cp requirements_optimized.txt requirements.txt
-echo "✅ Using optimized requirements"
-
-# Check if optimized app exists, otherwise use original
-if [ -f "streamlit_app_optimized.py" ]; then
-    echo "✅ Using optimized Streamlit app"
-    exec ./start.sh
+if [ $? -eq 0 ]; then
+    # Try simple version first (most compatible)
+    if [ -f "streamlit_app_simple.py" ]; then
+        echo "✅ Starting simple optimized app"
+        exec streamlit run streamlit_app_simple.py \
+            --server.port=${PORT:-8501} \
+            --server.address=0.0.0.0 \
+            --server.headless=true \
+            --server.enableCORS=false \
+            --server.enableXsrfProtection=false \
+            --logger.level=error \
+            --server.maxUploadSize=50
+    # Fallback to full optimized version
+    elif [ -f "streamlit_app_optimized.py" ]; then
+        echo "✅ Starting full optimized app"
+        exec streamlit run streamlit_app_optimized.py \
+            --server.port=${PORT:-8501} \
+            --server.address=0.0.0.0 \
+            --server.headless=true \
+            --server.enableCORS=false \
+            --server.enableXsrfProtection=false \
+            --logger.level=error \
+            --server.maxUploadSize=50
+    else
+        echo "✅ Starting original app"
+        exec streamlit run streamlit_app.py \
+            --server.port=${PORT:-8501} \
+            --server.address=0.0.0.0 \
+            --server.headless=true \
+            --server.enableCORS=false \
+            --server.enableXsrfProtection=false \
+            --logger.level=error
+    fi
 else
-    echo "⚠️  Optimized app not found, using original"
+    echo "❌ Module import failed, trying original app"
     exec streamlit run streamlit_app.py \
         --server.port=${PORT:-8501} \
         --server.address=0.0.0.0 \

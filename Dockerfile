@@ -2,10 +2,18 @@ FROM python:3.11-slim
 
 FROM python:3.11-slim
 
-# Install only essential system dependencies
+# Install essential system dependencies for OpenCV and MediaPipe
 RUN apt-get update && apt-get install -y \
     libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
     libgomp1 \
+    libfontconfig1 \
+    libice6 \
+    libxcb1 \
+    libxau6 \
+    libxdmcp6 \
     curl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
