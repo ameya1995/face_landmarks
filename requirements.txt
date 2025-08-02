@@ -1,11 +1,6 @@
-streamlit==1.36.0
-opencv-contrib-python==4.9.0.80
-# opencv-python==4.9.0.80
-opencv-python-headless
-matplotlib==3.8.2
-mdurl==0.1.2
-mediapipe==0.10.9
-pandas
+streamlit
+opencv-python
+mediapipe
 numpy
-streamlit-webrtc==0.47.7
-av==12.3.0
+pandas
+Pillow
